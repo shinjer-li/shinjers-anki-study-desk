@@ -1,0 +1,11 @@
+name: Idea
+description: Something the add-on could do, or do better.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Your idea
+      description: What would you like, and how would it help your studying?
+    validations:
+      required: true

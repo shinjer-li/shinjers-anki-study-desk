@@ -1,0 +1,46 @@
+/* About tab */
+#tab-about .ab-wrap { max-width: 920px; }
+#tab-about .ab-hero { display: flex; gap: 18px; align-items: flex-start; }
+#tab-about .ab-logo { width: 64px; height: 64px; border-radius: 14px; flex: none; box-shadow: var(--shadow); }
+#tab-about .ab-title .meta { margin-top: 3px; }
+#tab-about .ab-title .lede { margin-top: 8px; max-width: 64ch; }
+#tab-about .ab-links { margin-top: 18px; }
+#tab-about .ab-code { margin-top: 10px; }
+#tab-about .ab-code .num { color: var(--ink); font-weight: 600; }
+#tab-about .ab-section { margin-top: 28px; }
+#tab-about .ab-section > h2 { margin-bottom: 10px; }
+#tab-about p { color: var(--ink-2); }
+#tab-about h3 { color: var(--ink); }
+
+#tab-about .ab-steps { list-style: none; margin: 0; padding: 4px 20px; }
+#tab-about .ab-step { display: flex; gap: 14px; padding: 14px 0; }
+#tab-about .ab-step + .ab-step { border-top: 1px solid var(--rule); }
+#tab-about .ab-step p { margin: 2px 0 6px; max-width: 70ch; }
+#tab-about .ab-n {
+  flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--accent); color: var(--accent-ink); font-size: 12px; font-weight: 700;
+}
+
+#tab-about .ab-tabs { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+#tab-about .ab-tab {
+  display: flex; flex-direction: column; gap: 6px; padding: 14px 16px 16px; text-align: left;
+  border: 1px solid transparent; border-radius: 6px; background: var(--sheet); box-shadow: var(--shadow);
+  transition: border-color .15s;
+}
+#tab-about .ab-tab:hover { border-color: var(--accent); }
+#tab-about .ab-tab-head { display: flex; align-items: center; gap: 9px; }
+#tab-about .ab-ico { display: inline-flex; color: var(--accent-text); }
+#tab-about .ab-go { margin-left: auto; display: inline-flex; color: var(--ink-3); transition: transform .15s; }
+#tab-about .ab-tab:hover .ab-go { transform: translateX(2px); color: var(--accent-text); }
+#tab-about .ab-tab p { font-size: 12.5px; line-height: 1.55; }
+
+#tab-about .ab-cols { display: grid; grid-template-columns: 1fr 1.3fr; gap: 0 20px; align-items: start; }
+#tab-about .ab-list { margin: 0; padding: 6px 20px 6px 36px; color: var(--ink-2); }
+#tab-about .ab-list li { padding: 7px 0; }
+#tab-about .ab-list b, #tab-about .ab-code b { color: var(--ink); font-weight: 600; }
+#tab-about .ab-faq { margin: 0; padding: 4px 20px 6px; }
+#tab-about .ab-faq dt { font-weight: 600; color: var(--ink); padding-top: 12px; }
+#tab-about .ab-faq dt + dd { margin: 2px 0 0; padding-bottom: 12px; color: var(--ink-2); }
+#tab-about .ab-faq dd + dt { border-top: 1px solid var(--rule); }
+#tab-about .ab-foot { margin-top: 28px; }
+@media (max-width: 760px) { #tab-about .ab-cols { grid-template-columns: 1fr; } }

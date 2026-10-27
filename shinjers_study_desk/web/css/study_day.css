@@ -1,0 +1,104 @@
+/* Study Day tab. Layout only; shared pieces (.lab, .rb, .btn, .seg, .field,
+   .legend) live in base.css. Tokens only. */
+
+#tab-study_day { font-variant-numeric: tabular-nums; }
+#tab-study_day .sd { max-width: 1120px; }
+#tab-study_day .cols.sd { gap: 48px; }
+
+/* ── Headline ─────────────────────────────────────────────────────────── */
+#tab-study_day .sd-head { margin-bottom: 26px; }
+#tab-study_day .sd-titlerow { display: flex; align-items: baseline; gap: 16px; }
+#tab-study_day .sd-when { margin-left: auto; color: var(--ink-3); font-size: 12px; white-space: nowrap; }
+#tab-study_day .sd-head .lede { margin-top: 6px; max-width: 62ch; }
+#tab-study_day .sd-acts { margin-top: 14px; }
+#tab-study_day .sd-alert h1 { color: var(--flag-h); }
+
+/* ── Lab table ────────────────────────────────────────────────────────── */
+#tab-study_day .sd-lab th, #tab-study_day .sd-lab td { height: 34px; }
+#tab-study_day .sd-lab thead th { height: 26px; font-weight: 500; border-bottom-color: var(--rule); }
+#tab-study_day .sd-lab tbody th { font-weight: 500; color: var(--ink); width: 34%; }
+#tab-study_day .sd-lab .res { width: 1%; padding-right: 6px; }
+#tab-study_day .sd-lab .unit { width: 1%; padding-right: 22px; }
+#tab-study_day .sd-lab .sd-refcell { padding-right: 8px; }
+#tab-study_day .sd-lab .ref { height: auto; }
+#tab-study_day .sd-lab .sd-flag { width: 20px; padding-right: 6px; text-align: left; }
+#tab-study_day .sd-lab tr.is-h .res { color: var(--flag-h); }
+#tab-study_day .sd-lab tr.is-l .res { color: var(--flag-l); }
+#tab-study_day .sd-rng { font-size: 11.5px; color: var(--ink-3); }
+#tab-study_day .sd-note { font-size: 11.5px; color: var(--ink-3); }
+#tab-study_day .sr {
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+}
+#tab-study_day .sd-foot { margin-top: 10px; font-size: 11.5px; color: var(--ink-3); max-width: 70ch; }
+
+/* ── Charts ───────────────────────────────────────────────────────────── */
+#tab-study_day .sd-sec { margin-top: 36px; }
+#tab-study_day .sd-sec .sechead { margin-bottom: 10px; }
+#tab-study_day .sd-sec .h2meta { margin-left: 0; }
+#tab-study_day .sd-chart { width: 100%; min-height: 1px; }
+#tab-study_day .sd-legend { margin-top: 6px; flex-wrap: wrap; row-gap: 4px; }
+#tab-study_day .sd-sw-soft { opacity: .42; }
+#tab-study_day .sd-under { margin-top: 6px; }
+
+#tab-study_day .chart { display: block; overflow: visible; }
+#tab-study_day .chart .c-grid { stroke: var(--rule); stroke-width: 1; }
+#tab-study_day .chart .c-axis { stroke: var(--rule-2); stroke-width: 1; }
+#tab-study_day .chart .c-band { fill: var(--band); }
+#tab-study_day .chart .c-val { fill: var(--cap-lav); fill-opacity: .42; }
+#tab-study_day .chart .c-hi { fill: var(--cap-lav); }
+#tab-study_day .chart .c-stack { fill: var(--cap-green); }
+#tab-study_day .chart .c-zero { fill: var(--rule-2); }
+#tab-study_day .chart .c-avg { stroke: var(--ink-2); stroke-width: 1; stroke-dasharray: 3 3; }
+#tab-study_day .chart .c-tick { font: 10px var(--mono); fill: var(--ink-3); }
+#tab-study_day .chart .c-day { font: 10.5px var(--ui); fill: var(--ink-3); }
+#tab-study_day .chart .c-day.sub { font-size: 10px; }
+#tab-study_day .chart .c-day.today { fill: var(--ink); font-weight: 600; }
+#tab-study_day .chart g:hover rect { filter: brightness(.92); }
+/* Pace chart: one series, so use the solid accent. */
+#tab-study_day #sd-pace .chart .c-val { fill: var(--accent); fill-opacity: .55; }
+
+/* ── Side column ──────────────────────────────────────────────────────── */
+#tab-study_day .sd-side { padding-top: 4px; }
+#tab-study_day .sd-block + .sd-block { margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--rule); }
+#tab-study_day .sd-block h2 { margin-bottom: 6px; }
+#tab-study_day .sd-block .hint { margin-bottom: 12px; }
+#tab-study_day .sd-block .meta { margin-bottom: 10px; }
+#tab-study_day .sd-block .field { margin-bottom: 10px; }
+#tab-study_day .sd-block .field label { color: var(--ink-2); }
+#tab-study_day .sd-block .field .sel { min-width: 92px; }
+#tab-study_day .sd-block .field .numin { width: 92px; }
+#tab-study_day .sd-block > .btnrow { margin-top: 14px; }
+
+#tab-study_day .sd-prog { margin-top: 4px; }
+#tab-study_day .sd-track { position: relative; display: block; height: 6px; border-radius: 3px; background: var(--rule); overflow: hidden; }
+#tab-study_day .sd-track i { position: absolute; inset: 0 auto 0 0; border-radius: 3px; background: var(--cap-green); }
+#tab-study_day .sd-progtext { margin-top: 8px; font-size: 12.5px; color: var(--ink-2); }
+#tab-study_day .sd-progtext b { color: var(--ink); font-weight: 650; }
+#tab-study_day .sd-warn { margin-top: 10px; font-size: 12px; color: var(--flag-h); line-height: 1.45; }
+
+#tab-study_day .sd-frozen { font-size: 13.5px; font-weight: 600; margin-bottom: 2px; }
+
+#tab-study_day .sd-hist { list-style: none; margin: 4px 0 0; padding: 0; }
+#tab-study_day .sd-hist li { padding: 9px 0; }
+#tab-study_day .sd-hist li + li { border-top: 1px solid var(--rule); }
+#tab-study_day .sd-hist li:first-child { padding-top: 2px; }
+#tab-study_day .sd-htop { display: flex; align-items: center; gap: 8px; min-height: 20px; }
+#tab-study_day .sd-htop time { font-size: 11.5px; color: var(--ink-3); }
+#tab-study_day .sd-htop .btn { margin-left: auto; }
+#tab-study_day .sd-hlabel { font-size: 12.5px; line-height: 1.4; margin-top: 1px; }
+#tab-study_day .sd-hnote { font-size: 11.5px; color: var(--ink-3); margin-top: 2px; }
+#tab-study_day .sd-tag { font-size: 11px; color: var(--ink-3); font-style: italic; }
+#tab-study_day .sd-hist li.undone .sd-hlabel { color: var(--ink-3); text-decoration: line-through; text-decoration-thickness: 1px; }
+#tab-study_day .sd-more { margin-top: 6px; font-size: 12px; font-weight: 500; }
+
+#tab-study_day .sd-decks { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--rule); font-size: 12px; color: var(--ink-3); }
+#tab-study_day .sd-deckname { color: var(--ink-2); }
+#tab-study_day .sd-decks .linkbtn { margin-left: 6px; font-size: 12px; }
+
+@media (max-width: 640px) {
+  #tab-study_day .sd-titlerow { flex-wrap: wrap; row-gap: 2px; }
+  #tab-study_day .sd-when { margin-left: 0; width: 100%; order: -1; }
+  #tab-study_day .sd-lab tbody th { width: auto; white-space: normal; line-height: 1.3; }
+  #tab-study_day .sd-rng { display: none; }
+  #tab-study_day .sd-lab .unit { padding-right: 14px; }
+}

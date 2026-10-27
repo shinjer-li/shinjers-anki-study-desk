@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+dist/
+tools/out/
+.impeccable/
+shinjers_study_desk/_screenshot.html
+shinjers_study_desk/meta.json
+shinjers_study_desk/user_files/history-*.json

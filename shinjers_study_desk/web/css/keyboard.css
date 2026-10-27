@@ -1,0 +1,101 @@
+/* Keyboard. Layout only; .btn, .seg, .linkbtn, kbd live in base.css. Tokens only. */
+
+#tab-keyboard { font-variant-numeric: tabular-nums; }
+#tab-keyboard > * { max-width: 900px; }
+
+#tab-keyboard .kb-head { flex-wrap: wrap; row-gap: 10px; }
+#tab-keyboard .kb-hint { margin-top: 6px; font-size: 12.5px; color: var(--ink-3); }
+
+/* ── Filter and reset ─────────────────────────────────────────────────── */
+#tab-keyboard .kb-tools { display: flex; align-items: center; gap: 16px; margin: 22px 0 8px; flex-wrap: wrap; }
+#tab-keyboard .kb-filter {
+  display: inline-flex; align-items: center; gap: 7px; height: 30px; width: 280px; max-width: 100%;
+  padding: 0 9px; border: 1px solid var(--rule-2); border-radius: 4px; background: var(--sheet); color: var(--ink-3);
+}
+#tab-keyboard .kb-filter:hover { border-color: var(--ink-3); }
+#tab-keyboard .kb-filter:focus-within { border-color: var(--focus); }
+#tab-keyboard .kb-filter input {
+  flex: 1; min-width: 0; border: 0; outline: 0; background: none; color: var(--ink); font-size: 12.5px; padding: 0;
+}
+#tab-keyboard .kb-filter input::placeholder { color: var(--ink-3); }
+#tab-keyboard .kb-reset { margin-left: auto; font-size: 12.5px; }
+#tab-keyboard .kb-confirm { display: inline-flex; align-items: center; gap: 8px; color: var(--ink-2); flex-wrap: wrap; }
+
+/* ── Errors ───────────────────────────────────────────────────────────── */
+#tab-keyboard .kb-errors {
+  margin: 14px 0 4px; padding: 10px 14px; border-radius: 4px;
+  background: var(--crit-bg); border: 1px solid var(--crit-line); font-size: 12.5px; color: var(--ink);
+}
+#tab-keyboard .kb-errors b { color: var(--flag-h); font-weight: 650; }
+#tab-keyboard .kb-errors ul { margin: 4px 0 0; padding-left: 18px; color: var(--ink-2); }
+
+/* ── Groups and rows ──────────────────────────────────────────────────── */
+#tab-keyboard .kb-group { margin-top: 30px; }
+#tab-keyboard .kb-group h2 {
+  font-size: 13px; font-weight: 650; color: var(--ink-2);
+  padding-bottom: 6px; border-bottom: 1px solid var(--rule-2);
+}
+#tab-keyboard .kb-keys-t { table-layout: fixed; }
+#tab-keyboard .kb-keys-t th, #tab-keyboard .kb-keys-t td {
+  padding: 7px 12px 7px 0; min-height: 36px; height: 38px; text-align: left; vertical-align: middle;
+  border-bottom: 1px solid var(--rule); font-size: 12.5px;
+}
+#tab-keyboard .kb-keys-t tbody tr:last-child > * { border-bottom: 0; }
+#tab-keyboard .kb-row th { font-weight: 500; color: var(--ink); }
+#tab-keyboard .kb-row:hover { background: var(--hover); }
+#tab-keyboard .kb-row th, #tab-keyboard .kb-row td:last-child { padding-left: 8px; }
+#tab-keyboard .kb-note { display: block; margin-top: 2px; font-size: 11.5px; font-weight: 400; color: var(--ink-3); line-height: 1.35; }
+#tab-keyboard .kb-badge {
+  margin-left: 8px; padding: 1px 6px; border-radius: 3px; vertical-align: 1px;
+  font-size: 11.5px; font-weight: 650; letter-spacing: .03em; color: var(--accent-text); background: var(--band);
+}
+#tab-keyboard .kb-keys kbd { margin: 2px 5px 2px 0; }
+#tab-keyboard .kb-none { color: var(--ink-3); font-size: 12px; }
+#tab-keyboard .kb-def { font-size: 11.5px; color: var(--ink-3); }
+#tab-keyboard .kb-acts { text-align: right !important; white-space: nowrap; }
+#tab-keyboard .kb-acts .linkbtn { font-size: 12px; margin-left: 12px; }
+#tab-keyboard .kb-actcol { width: 184px; }
+#tab-keyboard .kb-acts .linkbtn.muted { font-weight: 500; text-decoration: none; }
+#tab-keyboard .kb-acts .linkbtn.muted:hover { color: var(--ink); text-decoration: underline; }
+
+/* capture */
+#tab-keyboard .kb-row.editing, #tab-keyboard .kb-row.editing:hover { background: var(--row-sel); }
+#tab-keyboard .kb-row.editing th { font-weight: 650; }
+#tab-keyboard .kb-listen { font-weight: 600; color: var(--accent-text); }
+#tab-keyboard .kb-listen span { margin-left: 6px; font-weight: 400; color: var(--ink-3); font-size: 11.5px; }
+#tab-keyboard kbd.pending { border-color: var(--flag-h); color: var(--flag-h); background: var(--crit-bg); }
+#tab-keyboard kbd.hit { border-color: var(--flag-h); color: var(--flag-h); }
+
+/* conflict */
+#tab-keyboard .kb-conflict > td { padding: 0 0 2px; height: auto; }
+#tab-keyboard .kb-cpanel {
+  background: var(--crit-bg); border-top: 1px solid var(--crit-line); border-bottom: 1px solid var(--crit-line);
+  padding: 14px 16px 16px;
+}
+#tab-keyboard .kb-cmsg { font-size: 12.5px; color: var(--ink); }
+#tab-keyboard .kb-cmsg kbd { margin: 0 4px 0 0; }
+#tab-keyboard .kb-cmsg b { color: var(--flag-h); font-weight: 650; }
+#tab-keyboard .kb-crit { display: inline-flex; vertical-align: -3px; margin-right: 8px; color: var(--flag-h); }
+#tab-keyboard .kb-choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; margin: 12px 0 14px; }
+#tab-keyboard .kb-choice {
+  position: relative; display: flex; gap: 8px; align-items: flex-start; padding: 9px 11px;
+  border: 1px solid var(--rule-2); border-radius: 4px; background: var(--sheet); cursor: pointer; font-size: 12.5px;
+}
+#tab-keyboard .kb-choice:hover { border-color: var(--ink-3); }
+#tab-keyboard .kb-choice input { margin: 2px 0 0; accent-color: var(--accent); }
+#tab-keyboard .kb-choice span { display: flex; flex-direction: column; gap: 3px; padding-right: 44px; }
+#tab-keyboard .kb-choice b { font-weight: 600; }
+#tab-keyboard .kb-choice small { font-size: 11.5px; color: var(--ink-3); }
+#tab-keyboard .kb-choice small kbd { height: 18px; line-height: 15px; min-width: 18px; font-size: 11px; margin: 0 0 0 2px; }
+#tab-keyboard .kb-choice.on { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+#tab-keyboard .kb-choice em { position: absolute; top: 9px; right: 10px; font-style: normal; font-size: 11.5px; font-weight: 650; color: var(--ink-3); }
+#tab-keyboard .kb-capply { display: flex; gap: 8px; }
+
+#tab-keyboard .kb-empty { margin-top: 24px; color: var(--ink-3); font-size: 12.5px; }
+
+@media (max-width: 700px) {
+  #tab-keyboard .kb-keys-t col:nth-child(3) { width: 0 !important; }
+  #tab-keyboard .kb-defc { padding: 0; }
+  #tab-keyboard .kb-defc > * { display: none; }
+  #tab-keyboard .kb-acts .linkbtn { margin-left: 10px; }
+}

@@ -1,0 +1,31 @@
+{
+    "appearance": {
+        "mode": "auto",
+        "theme": "slate"
+    },
+    "window": {
+        "on_top": false
+    },
+    "toolbar_link": true,
+    "keyboard": {
+        "review": {},
+        "overview": {},
+        "global": {},
+        "on_conflict": "swap",
+        "smart_undo": true,
+        "spare_keys": [
+            "F6",
+            "F7",
+            "F8",
+            "F9",
+            "F10",
+            "F12",
+            "Shift+F6",
+            "Shift+F7",
+            "Shift+F8",
+            "Shift+F9",
+            "Shift+F10",
+            "Shift+F12"
+        ]
+    }
+}

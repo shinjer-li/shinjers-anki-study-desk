@@ -61,7 +61,7 @@ for k in ["Ctrl+:", "d", "s", "a", "b", "t", "Shift+t", "y"]:
 
 aqt = types.ModuleType("aqt"); aqt.gui_hooks = hooks; aqt.mw = mw
 aqt_qt = types.ModuleType("aqt.qt"); aqt_qt.QAction = QAction; aqt_qt.QKeySequence = QKeySequence; aqt_qt.QShortcut = QShortcut
-aqt_qt.QGuiApplication = aqt_qt.QImage = aqt_qt.QUrl = object
+aqt_qt.QGuiApplication = aqt_qt.QImage = aqt_qt.Qt = aqt_qt.QUrl = object
 aqt_utils = types.ModuleType("aqt.utils"); aqt_utils.showText = lambda *a, **k: print(a[0]); aqt_utils.tooltip = lambda *a, **k: print("TOOLTIP:", a[0])
 sys.modules.update({"aqt": aqt, "aqt.qt": aqt_qt, "aqt.utils": aqt_utils})
 import os
@@ -193,6 +193,16 @@ r, n, e = run({"global": {"browse": "g"}})
 check("app-wide key beats the default", r["copy_text"] == [] and not e) or print(r["copy_text"], e)
 d = kbr.default_bindings("review", with_v)
 check("defaults column shows extras", d["reveal_all"] == ["V"] and d["replay_voice"] == ["V"])
+
+# 13b. Anki's Korean-layout aliases are hidden and follow the key they sit on
+with_ko = with_v + [("ㅍ", replay_voice), ("ㄱ", mw.reviewer.replayAudio)]
+CONFIG.clear(); CONFIG.update({"review": {"replay_audio": "q"}}); kbr.app_wide.recompute()
+new, r, n, e = kbr.remap_state("review", with_ko)
+d = kbr.default_bindings("review", with_ko)
+check("no Hangul keys shown", not any(kbr.is_hangul(k) for ks in list(r.values()) + list(d.values()) for k in ks)) or print(r, d)
+check("aliases follow their keys", dict(new)["ㅂ"] == mw.reviewer.replayAudio and "ㄱ" not in dict(new)
+      and dict(new)["ㅍ"] is ct.reveal_all and dict(new)["ㅊ"] is ct.reveal_next) or print(new)
+check("hangul twin keeps modifiers", kbr.hangul_twin("Ctrl+Alt+N") == "Ctrl+Alt+ㅜ" and kbr.hangul_twin("F6") is None)
 
 # 14. smart undo
 import time

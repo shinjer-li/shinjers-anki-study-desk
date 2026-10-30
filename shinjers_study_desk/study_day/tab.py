@@ -7,7 +7,6 @@ Drawn by web/js/study_day.js.
 from __future__ import annotations
 
 import datetime
-import time
 
 from aqt import mw
 
@@ -31,9 +30,14 @@ def fmt_time(ts: int) -> str:
     return f"{when.strftime('%a %b %d')}, {clock}"
 
 
+def _anki_today() -> datetime.date:
+    """Anki's today: before the day cutoff (4am by default) it's still yesterday."""
+    return datetime.date.fromtimestamp(mw.col.sched.day_cutoff - 86400)
+
+
 def _days(start: int, count: int) -> list[dict]:
     """Labels for `count` days starting `start` days from today."""
-    today = datetime.date.today()
+    today = _anki_today()
     out = []
     for i in range(start, start + count):
         d = today + datetime.timedelta(days=i)
@@ -123,7 +127,7 @@ class StudyDayTab(Tab):
         daily = ranges.normal_range(pace["reviews"][:-1])
         year = core.pace(col, decks, status.PACE_MAX_DAYS)
         return {
-            "now": time.strftime("%a %b %d").replace(" 0", " "),
+            "now": _anki_today().strftime("%a %b %d").replace(" 0", " "),
             "decks": core.describe_decks(col, decks),
             "head": status.headline(col, snap),
             "rows": lab_rows(snap),

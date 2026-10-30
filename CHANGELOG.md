@@ -1,6 +1,6 @@
 # What's new
 
-## Unreleased
+## 1.1.0 (October 2026)
 
 - **Review keys for AnKing cards**: `c` reveals the next cloze and `v` reveals them all (the
   green Reveal Next / Toggle All buttons). Anki's "Replay own voice" moves from `v` to a spare
@@ -11,6 +11,20 @@
 - **Copy card text**: `g` copies the card's text with the clozes filled in, without Extra or
   the hints, ready to paste into a search.
 - All of these are on the Keyboard tab under Review › AnKing & copy, and can be changed there.
+- Copied images are pasted at the size they're shown on the card (at most 1200 px), not
+  at full resolution.
+- Fixed `c` (Reveal next) also showing the tags on AnKing cards.
+- The Keyboard tab no longer lists Anki's Korean-layout duplicate keys (ㄷ, ㅕ…). They now
+  follow the key they share, so your changes also work with a Korean keyboard.
+- Keyboard: giving a key to one action no longer wipes the other keys of the action that had
+  it (e.g. binding Return no longer unbinds Space from Show answer), and Swap no longer
+  leaves that action with no key when there was nothing to swap.
+- Study Day: learning cards in a Study Ahead or other filtered deck are counted on the day
+  they're really due, which also fixes a false "Ahead cards are due today" right after
+  building the deck. Day labels follow Anki's day cutoff (4am) instead of midnight.
+- Trouble Spots: CSV exports open correctly in Excel ("›" no longer shows as "â€º"), the tab
+  no longer sticks on "Reading your reviews…" after an error, and the selected topic stays
+  selected after a refresh.
 - Fixed the window sometimes opening blank until you scrolled.
 
 ## 1.0.0 (October 2026)

@@ -57,6 +57,11 @@ Every shortcut on the review screen, the deck overview and everywhere else in An
 action and press a key. If the key is taken, swap it, give the old action a spare key, or
 unbind it. **Smart undo** flips back to the question instead of undoing a review.
 
+It also adds review keys for AnKing cards: `c` reveals the next cloze and `v` reveals them all,
+`p` copies the image under the mouse (or right-click › Copy image), and `g` copies the card's
+text with the clozes filled in. Open next hint and Open all hints (First Aid, Bootcamp…) can be
+bound too.
+
 ![Keyboard](docs/screenshots/keyboard.png)
 
 ### Settings and About

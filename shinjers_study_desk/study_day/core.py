@@ -261,13 +261,14 @@ def forecast(col: Collection, deck_ids: list[int], days: int) -> dict:
         f"where queue in (1, 2, 3) and {_scope_sql(col, deck_ids)}"
     )
     for queue, cdue, odue, did, odid in rows:
+        # Cards in a filtered deck keep their real due date in odue (due is
+        # just their position in the deck).
+        real = odue if odid and odue else cdue
         if queue == 1:
             # Learning step due at a timestamp.
-            idx = 0 if cdue < cutoff else (cdue - cutoff) // 86400 + 1
+            idx = 0 if real < cutoff else (real - cutoff) // 86400 + 1
         else:
-            # Review cards in a filtered deck keep their real date in odue.
-            day = odue if (queue == 2 and odid) else cdue
-            idx = max(0, day - today)
+            idx = max(0, real - today)
         if idx > days:
             continue
         if ahead and did == ahead:
@@ -351,9 +352,8 @@ def ahead_info(col: Collection) -> dict | None:
     # Cards whose real due date has now arrived (the deck was left overnight).
     due_now = col.db.scalar(
         "select count() from cards where did = ? and ("
-        "(queue = 2 and odue <= ?) or (queue = 3 and due <= ?) or (queue = 1 and due < ?))",
+        "(queue in (2, 3) and odue <= ?) or (queue = 1 and odue < ?))",
         did,
-        today,
         today,
         col.sched.day_cutoff,
     )

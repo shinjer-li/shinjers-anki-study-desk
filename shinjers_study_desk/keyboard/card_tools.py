@@ -19,7 +19,7 @@ import os
 from urllib.parse import unquote, urlparse
 
 from aqt import gui_hooks, mw
-from aqt.qt import QGuiApplication, QImage, QUrl
+from aqt.qt import QGuiApplication, QImage, Qt, QUrl
 from aqt.utils import tooltip
 
 from .. import prefs
@@ -74,10 +74,20 @@ def media_path(url: str) -> str | None:
     return path
 
 
-def copy_image_file(path: str) -> bool:
+# Card images are often 2000+ px; paste them at a sensible size instead.
+MAX_COPY_SIZE = 1200
+
+
+def copy_image_file(path: str, width: int = 0) -> bool:
+    """Copy the image at width px wide (its size on the card), within MAX_COPY_SIZE."""
     image = QImage(path)
     if image.isNull():
         return False
+    if width > 0 and width < image.width():
+        image = image.scaledToWidth(width, Qt.TransformationMode.SmoothTransformation)
+    if max(image.width(), image.height()) > MAX_COPY_SIZE:
+        image = image.scaled(MAX_COPY_SIZE, MAX_COPY_SIZE, Qt.AspectRatioMode.KeepAspectRatio,
+                             Qt.TransformationMode.SmoothTransformation)
     QGuiApplication.clipboard().setImage(image)
     return True
 
@@ -88,7 +98,7 @@ def copy_image() -> None:
             tooltip("No image on this card")
             return
         path = media_path(picked.get("src", ""))
-        if not path or not copy_image_file(path):
+        if not path or not copy_image_file(path, picked.get("width") or 0):
             tooltip("Couldn't copy that image")
             return
         what = f"{picked['section']} image" if picked.get("section") else "Image"

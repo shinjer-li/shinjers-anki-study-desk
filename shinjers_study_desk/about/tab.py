@@ -11,7 +11,7 @@ from aqt.utils import openLink
 from ..tab import Tab
 
 # Bump this (and "human_version" in manifest.json) for every release.
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 REPO = "https://github.com/shinjer-li/shinjers-anki-study-desk"
 # The number AnkiWeb gives the add-on after the first upload. None hides the
 # "Rate it" link and the install code.

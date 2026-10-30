@@ -104,6 +104,24 @@ def norm(key):
     return QKeySequence(key).toString(QKeySequence.SequenceFormat.PortableText)
 
 
+# Anki's review screen also binds the Hangul letter on the same physical key as
+# some shortcuts ("ㄷ" for E), so they work with a Korean keyboard layout. We
+# leave those out of the Keyboard tab and conflict handling, and instead give
+# every final key its Hangul twin (standard 2-set layout).
+HANGUL = dict(zip("QWERTYUIOPASDFGHJKLZXCVBNM", "ㅂㅈㄷㄱㅅㅛㅕㅑㅐㅔㅁㄴㅇㄹㅎㅗㅓㅏㅣㅋㅌㅊㅍㅠㅜㅡ"))
+
+
+def is_hangul(key):
+    return any("\u3131" <= ch <= "\u318e" for ch in key)
+
+
+def hangul_twin(key):
+    """'Ctrl+Alt+N' -> 'Ctrl+Alt+ㅜ'; None for keys without one."""
+    *mods, last = key.split("+")
+    twin = HANGUL.get(last.upper()) if len(last) == 1 else None
+    return "+".join([*mods, twin]) if twin else None
+
+
 def handler_id(fn):
     if isinstance(fn, partial):
         name = getattr(fn.func, "__name__", "")
@@ -240,7 +258,7 @@ def current_bindings(state, shortcuts):
     by_key = {norm(k): name for name, _, keys in actions for k in keys}
 
     entries = [(norm(key), fn) for key, fn in shortcuts]
-    entries = [(k, fn) for k, fn in entries if k]
+    entries = [(k, fn) for k, fn in entries if k and not is_hangul(k)]
     matched = {by_handler[handler_id(fn)] for _, fn in entries if handler_id(fn) in by_handler}
 
     current, fns = {}, {}
@@ -307,6 +325,7 @@ def remap_state(state, shortcuts):
         if result.get(name) == keys:
             notes.pop(name, None)
     new_list = [(k, fns[name]) for name, keys in result.items() for k in keys]
+    new_list += [(hangul_twin(k), fn) for k, fn in new_list if hangul_twin(k)]
     return new_list, result, notes, errors + name_errors + res_errors
 
 

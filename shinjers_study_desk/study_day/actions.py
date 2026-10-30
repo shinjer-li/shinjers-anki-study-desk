@@ -8,6 +8,7 @@ can be undone later from the History list).
 
 from __future__ import annotations
 
+import html
 import os
 import re
 from typing import Callable
@@ -127,7 +128,7 @@ def study_ahead(parent, deck_ids, days: int, extra_new: int, done=None) -> None:
                 },
             )
             tooltip(
-                f"Created <b>{mw.col.decks.name(did)}</b> with {count} cards.",
+                f"Created <b>{html.escape(mw.col.decks.name(did))}</b> with {count} cards.",
                 parent=parent,
             )
         else:

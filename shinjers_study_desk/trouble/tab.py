@@ -65,21 +65,24 @@ class TroubleTab(Tab):
         def done(result):
             if run_id != self._run_id:
                 return
+            # Keep the same topic selected after a reload, wherever it now ranks.
+            picked = self._topic()
+            names = [t.name for t in result.topics]
             self.result, self.error = result, ""
             self._result_key = key
-            worst = next((i for i, t in enumerate(result.topics) if t.again), None)
-            if self.selected is None or self.selected >= len(result.topics):
-                self.selected = worst
+            if picked is not None and picked.name in names:
+                self.selected = names.index(picked.name)
+            else:
+                self.selected = next((i for i, t in enumerate(result.topics) if t.again), None)
             self._send()
 
         def failed(exc):
             if run_id != self._run_id:
                 return
-            if isinstance(exc, ValueError):
-                self.result, self.error = None, str(exc)
-                self._send()
-            else:
-                showWarning(f"Trouble Spots couldn't load:\n\n{exc}", parent=desk)
+            self.result, self.error = None, str(exc)
+            self._send()  # replace the "Reading your reviews…" placeholder
+            if not isinstance(exc, ValueError):
+                showWarning(f"Trouble Spots couldn't load:\n\n{exc}", parent=window.current() or mw)
 
         QueryOp(
             parent=desk,
@@ -242,7 +245,9 @@ class TroubleTab(Tab):
         else:
             content = a.export_csv(self.result)
         try:
-            with open(path, "w", encoding="utf-8", newline="") as f:
+            # The BOM tells Excel it's UTF-8 (otherwise "›" shows up as "â€º").
+            encoding = "utf-8" if ext == "html" else "utf-8-sig"
+            with open(path, "w", encoding=encoding, newline="") as f:
                 f.write(content)
         except OSError as exc:
             showWarning(f"Couldn't save the file:\n\n{exc}", parent=desk)

@@ -189,6 +189,22 @@ def test_freeze_start_tomorrow():
     print("freeze start tomorrow ok")
 
 
+def test_ahead_learning_cards_use_real_due():
+    # Inside a filtered deck `due` is the card's position; the real date is in odue.
+    col = make_col()
+    day_learn = add_cards(col, "A", 1, due_in=1)
+    card = col.get_card(day_learn[0])
+    card.type, card.queue = 1, 3
+    col.update_card(card)
+    add_cards(col, "A", 1, due_in=1)
+    did, count = core.create_study_ahead(col, [], 1, 0)
+    assert count == 2 and col.get_card(day_learn[0]).did == did
+    assert core.ahead_info(col)["due_now"] == 0
+    fc = core.forecast(col, [], 3)
+    assert fc["ahead"][:3] == [0, 2, 0], fc
+    print("ahead learning cards ok")
+
+
 def test_freeze_removes_study_ahead_and_shifts_filtered():
     col = make_col()
     a = add_cards(col, "A", 2, due_in=1)

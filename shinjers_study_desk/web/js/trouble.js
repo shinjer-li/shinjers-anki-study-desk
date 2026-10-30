@@ -6,9 +6,9 @@
   const esc = (s) => desk.esc(s == null ? "" : String(s));
   const pct = (f, d = 0) => desk.num((f || 0) * 100, d) + "%";
 
-  // Topic names are tag paths ("Cardio::Murmurs"): mute the parents.
+  // Topic names are paths ("Endocrine › Physiology"): mute the parents.
   function topicName(name) {
-    const parts = String(name || "").split("::");
+    const parts = String(name || "").split(" › ");
     const last = parts.pop();
     if (!parts.length) return esc(last);
     return `<span class="tr-sec">${esc(parts.join(" › "))} › </span>${esc(last)}`;

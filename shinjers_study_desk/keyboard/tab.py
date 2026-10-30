@@ -173,14 +173,18 @@ class KeyboardTab(Tab):
         holder = next((n for n, ks in result.items() if key in ks and n != name), None)
         if holder:
             how = arg.get("resolve") if arg.get("resolve") in POLICIES else remap.policy()
-            if how == SWAP:
-                section[holder] = [k for k in old if k != key][:1]
-            elif how == SPARE:
+            # The holder only loses this key; any other keys it has stay.
+            rest = [k for k in result[holder] if k != key]
+            freed = [k for k in old if k != key][:1]
+            if how == SWAP and freed:
+                section[holder] = rest + [k for k in freed if k not in rest]
+            elif how == DELETE or rest:
+                section[holder] = rest
+            else:
+                # Spare, or a swap with no old key to give: hand out a spare key.
                 used = {k for ks in result.values() for k in ks} | remap.app_wide.all_keys()
                 spare = next((k for k in remap.spare_keys() if k not in used and k != key), None)
                 section[holder] = [spare] if spare else []
-            else:
-                section[holder] = []
         return True
 
     # ── settings ──────────────────────────────────────────────────────────────

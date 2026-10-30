@@ -106,6 +106,22 @@ assert [r["name"] for r in anking["rows"]] == [
     "reveal_next", "reveal_all", "hint_next", "hint_all", "copy_text", "copy_image"], anking
 assert next(r for r in anking["rows"] if r["name"] == "reveal_next")["keys"] == ["c"], anking
 print("keyboard: data ok")
+
+# Taking a key from an action only takes that key; its other keys stay.
+kbtab = next(t for t in shinjers_study_desk.TABS if t.id == "keyboard")
+kbtab._states = lambda: {"review": ({}, {"show_answer": ["Space", "Return"], "again": ["1"],
+                                         "hint_next": [], "reveal_next": ["C"]}, [], [])}
+for how, name, key, holder, want in [
+    ("swap", "again", "Return", "show_answer", ["Space", "1"]),
+    ("delete", "again", "Return", "show_answer", ["Space"]),
+    ("spare", "again", "Return", "show_answer", ["Space"]),
+    ("delete", "hint_next", "C", "reveal_next", []),
+    ("swap", "hint_next", "C", "reveal_next", ["F6"]),  # no old key to swap: spare
+]:
+    cfg = {}
+    assert kbtab._bind(cfg, {"scope": "review", "name": name, "key": key, "resolve": how})
+    assert cfg["review"][holder] == want and cfg["review"][name] == [key], (how, cfg)
+print("keyboard: bind ok")
 st = next(t for t in shinjers_study_desk.TABS if t.id == "settings").data(None)
 assert st["appearance"] == {"mode": "auto", "theme": "slate"} and len(st["sections"]) == 4, st
 print("settings: data ok")

@@ -12,6 +12,19 @@ window.studyDeskCard = window.studyDeskCard || (function () {
   });
   document.addEventListener("mouseleave", () => { hovered = null; });
 
+  // When a key is an Anki shortcut (ours or Anki's), Qt eats the keydown but still
+  // hands the page the keyup. AnKing's template toggles the tags on a "C" keyup, so
+  // pressing c for Reveal next would also show the tags. Drop any keyup whose
+  // keydown the page never saw, before the card's own listeners get it.
+  const down = new Set();
+  window.addEventListener("keydown", (e) => { down.add(e.code); }, true);
+  window.addEventListener("keyup", (e) => {
+    if (down.delete(e.code)) return;
+    e.stopImmediatePropagation();
+    e.preventDefault();
+  }, true);
+  window.addEventListener("blur", () => down.clear());
+
   function shown(el) {
     if (!el.isConnected) return false;
     for (let n = el; n && n.nodeType === 1; n = n.parentElement) {
@@ -98,6 +111,7 @@ window.studyDeskCard = window.studyDeskCard || (function () {
     setTimeout(() => img.classList.remove("sd-copied"), 700);
     return {
       src: img.src,
+      width: img.clientWidth, // 0 when it's inside a closed hint
       section: sectionOf(img),
       index: list.indexOf(img) + 1,
       total: list.length,

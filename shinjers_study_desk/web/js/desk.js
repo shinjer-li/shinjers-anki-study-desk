@@ -133,8 +133,10 @@ window.desk = window.desk || {};
   };
 
   desk.receive = function (id, data) {
+    const first = !(id in desk.state);
     desk.state[id] = data;
     draw(id);
+    if (first) desk.repaint();
   };
 
   desk.patch = function (id, part) {
@@ -192,6 +194,25 @@ window.desk = window.desk || {};
       if (active === "settings") draw("settings");
     }
   };
+
+  // ── repaint ───────────────────────────────────────────────────────────────
+  // Qt's web view sometimes misses a frame when the window opens or resizes,
+  // leaving the content blank until you scroll. Re-layering the scroll area
+  // makes it draw again; do it now and once more after the window settles.
+  let repaintTimer = null;
+  function nudge() {
+    const content = document.querySelector(".content");
+    if (!content) return;
+    content.style.transform = "translateZ(0)";
+    requestAnimationFrame(() => requestAnimationFrame(() => { content.style.transform = ""; }));
+  }
+  desk.repaint = function () {
+    requestAnimationFrame(nudge);
+    clearTimeout(repaintTimer);
+    repaintTimer = setTimeout(nudge, 350);
+  };
+  window.addEventListener("resize", desk.repaint);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) desk.repaint(); });
 
   // ── boot ──────────────────────────────────────────────────────────────────
   function tabButton(t) {

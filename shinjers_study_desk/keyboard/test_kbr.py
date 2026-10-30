@@ -44,7 +44,8 @@ class QAction:
     def setShortcuts(s, ks): s._keys = list(ks)
 
 hooks = types.SimpleNamespace(state_shortcuts_will_change=[], state_did_change=[], profile_did_open=[],
-                              reviewer_did_show_answer=[], operation_did_execute=[])
+                              reviewer_did_show_answer=[], operation_did_execute=[],
+                              webview_will_set_content=[], webview_will_show_context_menu=[])
 CONFIG = {}
 class Form: pass
 class MW:
@@ -60,6 +61,7 @@ for k in ["Ctrl+:", "d", "s", "a", "b", "t", "Shift+t", "y"]:
 
 aqt = types.ModuleType("aqt"); aqt.gui_hooks = hooks; aqt.mw = mw
 aqt_qt = types.ModuleType("aqt.qt"); aqt_qt.QAction = QAction; aqt_qt.QKeySequence = QKeySequence; aqt_qt.QShortcut = QShortcut
+aqt_qt.QGuiApplication = aqt_qt.QImage = aqt_qt.QUrl = object
 aqt_utils = types.ModuleType("aqt.utils"); aqt_utils.showText = lambda *a, **k: print(a[0]); aqt_utils.tooltip = lambda *a, **k: print("TOOLTIP:", a[0])
 sys.modules.update({"aqt": aqt, "aqt.qt": aqt_qt, "aqt.utils": aqt_utils})
 import os
@@ -166,6 +168,31 @@ check("extra QShortcut created", len(kbr.app_wide.extra) == 1 and kbr.app_wide.e
 CONFIG.clear(); CONFIG.update({"global": {"stats": "t"}}); kbr.app_wide.recompute()
 st = kbr.app_wide.handles["stats"]
 check("second stats shortcut disabled", st[0].enabled and not st[1].enabled and not kbr.app_wide.extra)
+
+# 13. our own review actions (card_tools.py)
+ct = kbr.card_tools
+r, n, e = run({})
+check("extras get their default keys", r["reveal_next"] == ["C"] and r["reveal_all"] == ["V"]
+      and r["copy_text"] == ["G"] and r["copy_image"] == ["P"] and r["hint_next"] == []) or print(r)
+check("defaults leave no notes", not n and not e) or print(n, e)
+def replay_voice(): pass
+replay_voice.__name__ = "onReplayRecorded"
+with_v = list(mw.reviewer._shortcutKeys()) + [("v", replay_voice)]
+CONFIG.clear(); kbr.app_wide.recompute()
+new, r, n, e = kbr.remap_state("review", with_v)
+check("Anki's v moves aside for reveal_all", r["reveal_all"] == ["V"] and r["replay_voice"] == ["F6"]
+      and "reveal_all" in n["replay_voice"] and not e) or print(r, n, e)
+check("keys call our handlers", dict(new)["C"] is ct.reveal_next and dict(new)["V"] is ct.reveal_all
+      and dict(new)["F6"] is replay_voice)
+r, n, e = run({"review": {"mark": "c"}})
+check("your own c beats the default", r["mark"] == ["C"] and r["reveal_next"] == [] and not e) or print(r, e)
+r, n, e = run({"review": {"reveal_next": "", "hint_next": "h", "copy_image": "x"}})
+check("extras can be cleared and rebound", r["reveal_next"] == [] and r["hint_next"] == ["H"]
+      and r["copy_image"] == ["X"] and n.get("hint_next") == "changed by you" and not e) or print(r, n, e)
+r, n, e = run({"global": {"browse": "g"}})
+check("app-wide key beats the default", r["copy_text"] == [] and not e) or print(r["copy_text"], e)
+d = kbr.default_bindings("review", with_v)
+check("defaults column shows extras", d["reveal_all"] == ["V"] and d["replay_voice"] == ["V"])
 
 # 14. smart undo
 import time

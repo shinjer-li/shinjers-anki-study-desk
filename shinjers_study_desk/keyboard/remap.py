@@ -13,7 +13,7 @@ from aqt.qt import QAction, QKeySequence, QShortcut
 from aqt.utils import tooltip
 
 from .. import prefs
-from . import smart_undo
+from . import card_tools, smart_undo
 from .resolver import POLICIES, SWAP, parse_keys, resolve, translate_names
 
 # Each entry: (action name, Anki's internal handler name, default keys).
@@ -60,6 +60,10 @@ OVERVIEW_ACTIONS = [
 ]
 
 STATE_ACTIONS = {"review": REVIEW_ACTIONS, "overview": OVERVIEW_ACTIONS}
+
+# Our own actions that Anki doesn't have (card_tools.py), per screen:
+# [(name, default keys, handler)].
+STATE_EXTRAS = {"review": card_tools.REVIEW_EXTRAS}
 
 # App-wide shortcuts that work on every screen, recognized by default key.
 GLOBAL_SHORTCUTS = {
@@ -184,6 +188,7 @@ class AppWide:
         avoid = set()
         for state, actions in STATE_ACTIONS.items():
             avoid.update(norm(k) for _, _, keys in actions for k in keys)
+            avoid.update(norm(k) for _, keys, _ in STATE_EXTRAS.get(state, []) for k in keys)
             avoid.update(k for keys in read_section(state)[0].values() for k in keys)
         self.result, self.notes, res_errors = resolve(
             self.original, wanted, policy(), spare_keys(), avoid=avoid
@@ -252,9 +257,22 @@ def current_bindings(state, shortcuts):
     return current, fns
 
 
+def default_bindings(state, shortcuts):
+    """Every action on one screen with its keys before the user's changes,
+    including our own actions' default keys."""
+    current, _ = current_bindings(state, shortcuts)
+    for name, keys, _ in STATE_EXTRAS.get(state, []):
+        current[name] = [norm(k) for k in keys]
+    return current
+
+
 def remap_state(state, shortcuts):
     """Return (new shortcut list, result, notes, errors) for one screen."""
     current, fns = current_bindings(state, shortcuts)
+    extras = STATE_EXTRAS.get(state, [])
+    for name, _, fn in extras:
+        current[name] = []
+        fns[name] = fn
     if state == "review" and "undo" in fns and config().get("smart_undo", True):
         fns["undo"] = smart_undo.undo
 
@@ -264,6 +282,14 @@ def remap_state(state, shortcuts):
     for name in [n for n in wanted if n in known and n not in current]:
         errors.append(f"'{name}' isn't available in your Anki version")
         del wanted[name]
+    # Our actions' default keys are applied as if the user had picked them, so
+    # an Anki action on the same key moves aside instead of sharing it.
+    # Keys you gave to something yourself always win over these defaults.
+    defaults = {}
+    taken = {k for keys in wanted.values() for k in keys} | app_wide.wanted_keys
+    for name, keys, _ in extras:
+        if name not in wanted:
+            defaults[name] = wanted[name] = [k for k in map(norm, keys) if k not in taken]
     wanted, name_errors = translate_names(current, wanted)
 
     reserved = app_wide.wanted_keys
@@ -277,6 +303,9 @@ def remap_state(state, shortcuts):
         avoid=avoid,
         reserved_label="an app-wide shortcut",
     )
+    for name, keys in defaults.items():
+        if result.get(name) == keys:
+            notes.pop(name, None)
     new_list = [(k, fns[name]) for name, keys in result.items() for k in keys]
     return new_list, result, notes, errors + name_errors + res_errors
 
@@ -334,7 +363,8 @@ def preview_reports():
             else:
                 reports[state] = ({}, {}, [f"couldn't read shortcuts: {e}"])
             continue
-        order = {name: i for i, (name, _, _) in enumerate(STATE_ACTIONS[state])}
+        names = [n for n, _, _ in STATE_ACTIONS[state]] + [n for n, _, _ in STATE_EXTRAS.get(state, [])]
+        order = {name: i for i, name in enumerate(names)}
         result = dict(sorted(result.items(), key=lambda kv: order.get(kv[0], len(order))))
         reports[state] = (result, notes, errors)
     return reports
@@ -344,3 +374,4 @@ def setup():
     gui_hooks.state_shortcuts_will_change.append(on_state_shortcuts)
     gui_hooks.state_did_change.append(on_state_did_change)
     gui_hooks.profile_did_open.append(on_profile_open)
+    card_tools.setup()

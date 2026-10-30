@@ -12,7 +12,7 @@ Layout:
   prefs.py       add-on settings: look, window, keyboard
   study_day/     Study ahead, Freeze, the day's numbers, the Decks status bar
   trouble/       Trouble Spots (read-only analysis of your misses)
-  keyboard/      the shortcut remapper and smart undo
+  keyboard/      the shortcut remapper, smart undo and card tools
   settings/      the Settings tab
   about/         the About tab (version, quick start, help links)
   web/           the page: index.html, css/, js/

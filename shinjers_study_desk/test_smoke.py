@@ -100,6 +100,11 @@ for tab in shinjers_study_desk.TABS:
 
 kb = next(t for t in shinjers_study_desk.TABS if t.id == "keyboard").data(None)
 assert [s["id"] for s in kb["scopes"]] == ["review", "overview", "global"], kb
+review = next(s for s in kb["scopes"] if s["id"] == "review")
+anking = next(g for g in review["groups"] if g["title"] == "AnKing & copy")
+assert [r["name"] for r in anking["rows"]] == [
+    "reveal_next", "reveal_all", "hint_next", "hint_all", "copy_text", "copy_image"], anking
+assert next(r for r in anking["rows"] if r["name"] == "reveal_next")["keys"] == ["c"], anking
 print("keyboard: data ok")
 st = next(t for t in shinjers_study_desk.TABS if t.id == "settings").data(None)
 assert st["appearance"] == {"mode": "auto", "theme": "slate"} and len(st["sections"]) == 4, st

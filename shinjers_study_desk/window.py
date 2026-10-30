@@ -81,6 +81,7 @@ class DeskWindow(QWidget):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.web)
+        self._paint_background()
 
         self._timer = QTimer(self)
         self._timer.setSingleShot(True)
@@ -89,7 +90,10 @@ class DeskWindow(QWidget):
 
         self.resize(1040, 760)
         restoreGeom(self, GEOM_KEY)
-        self._load_page()
+        # Load once the window is on screen at its final (maximized) size. A page
+        # that loads while the window is still being shown can come up blank
+        # until something forces a repaint, like scrolling.
+        QTimer.singleShot(0, self._load_page)
 
     # ── page ──────────────────────────────────────────────────────────────────
 
@@ -227,6 +231,11 @@ class DeskWindow(QWidget):
                 appearance_changed()
 
     # ── window ────────────────────────────────────────────────────────────────
+
+    def showEvent(self, event) -> None:
+        super().showEvent(event)
+        if self.ready:
+            self.web.eval("desk.repaint()")
 
     def closeEvent(self, event) -> None:
         global _window

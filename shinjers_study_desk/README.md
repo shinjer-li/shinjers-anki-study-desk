@@ -23,7 +23,7 @@ size and keep it open next to Anki.
 |---|---|
 | **Study Day** | Today's numbers next to your usual range, flagged **H** (high) or **L** (low) when they're outside it. **Study ahead** pulls upcoming reviews into a temporary "Ahead" deck. **Freeze** pauses reviews for a break so they don't pile up. Also a forecast, your pace, and a history you can undo, which stays in step with Anki's own undo. |
 | **Trouble Spots** | Topics ranked by how often you miss them, grouped by resource tags (First Aid, Pathoma, Boards & Beyond, Sketchy…). Topics and the cards of the one you click sit side by side, and the controls at the top fold away with the arrow next to the title. You can jump to the Browser or export a study sheet or CSV. It never changes your cards. |
-| **Keyboard** | Every shortcut on the review screen, the deck overview, and everywhere else. Click an action and press a key. If the key is taken, pick what happens to the action that had it: swap, give it a spare key, or unbind it. Also "smart undo" for reviewing. |
+| **Keyboard** | Every shortcut on the review screen, the deck overview, and everywhere else. Click an action and press a key. If the key is taken, pick what happens to the action that had it: swap, give it a spare key, or unbind it. Also "smart undo" for reviewing, and review keys Anki doesn't have: reveal AnKing clozes (`c` next, `v` all), open hints, copy the card's text (`g`) or an image (`p`, or right-click it). |
 | **About** | What the add-on does, a quick start, the version, and links to the GitHub page and issue tracker. |
 | **Settings** | Light/dark and color theme, the window, the top-bar link, plus each tab's own options (decks, status bar style, conflict rule, and so on). |
 
@@ -47,7 +47,7 @@ config.json     default add-on settings (documented in config.md)
 common/         shared bits (the deck picker)
 study_day/      Study ahead, Freeze, the day's numbers, the Decks-screen status bar
 trouble/        Trouble Spots analysis (read-only)
-keyboard/       the shortcut remapper and smart undo
+keyboard/       the shortcut remapper, smart undo and card_tools (reveal, hints, copy)
 about/          the About tab (version number, GitHub and AnkiWeb links)
 settings/       the Settings tab
 web/            the page: index.html, css/, js/ (see web/README.md)

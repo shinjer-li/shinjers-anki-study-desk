@@ -1,5 +1,18 @@
 # What's new
 
+## Unreleased
+
+- **Review keys for AnKing cards**: `c` reveals the next cloze and `v` reveals them all (the
+  green Reveal Next / Toggle All buttons). Anki's "Replay own voice" moves from `v` to a spare
+  key. "Open next hint" and "Open all hints" (First Aid, Bootcamp…) are there to bind too.
+- **Copy image**: right-click any image on the review screen, or press `p` to copy the image
+  under the mouse. With the mouse elsewhere, each press copies the card's next image, even
+  from a First Aid or Bootcamp section that's still closed.
+- **Copy card text**: `g` copies the card's text with the clozes filled in, without Extra or
+  the hints, ready to paste into a search.
+- All of these are on the Keyboard tab under Review › AnKing & copy, and can be changed there.
+- Fixed the window sometimes opening blank until you scrolled.
+
 ## 1.0.0 (October 2026)
 
 First public release.

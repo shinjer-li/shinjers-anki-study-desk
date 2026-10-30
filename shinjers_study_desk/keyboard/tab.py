@@ -45,6 +45,9 @@ LABELS = {
     "note_types": "Note types", "addons": "Add-ons", "exit": "Exit", "guide": "Guide",
     "full_screen": "Full screen", "zoom_in": "Zoom in", "zoom_out": "Zoom out",
     "reset_zoom": "Reset zoom",
+    "reveal_next": "Reveal next cloze", "reveal_all": "Reveal all clozes",
+    "hint_next": "Open next hint", "hint_all": "Open all hints",
+    "copy_image": "Copy image", "copy_text": "Copy card text",
     **{f"flag_{i}": f"Flag {c}" for i, c in enumerate(
         ["red", "orange", "green", "blue", "pink", "turquoise", "purple"], 1)},
 }
@@ -57,6 +60,8 @@ GROUPS = {
         ("Card", ["mark", *[f"flag_{i}" for i in range(1, 8)], "suspend_card",
                   "suspend_note", "bury_card", "bury_note", "edit", "forget",
                   "set_due_date", "create_copy", "delete_note"]),
+        ("AnKing & copy", ["reveal_next", "reveal_all", "hint_next", "hint_all",
+                           "copy_text", "copy_image"]),
         ("Audio", ["replay_audio", "pause_audio", "seek_backward", "seek_forward",
                    "record_voice", "replay_voice"]),
         ("Other", []),
@@ -94,7 +99,7 @@ class KeyboardTab(Tab):
         out = {}
         for state, screen in (("review", mw.reviewer), ("overview", mw.overview)):
             try:
-                defaults, _ = remap.current_bindings(state, list(screen._shortcutKeys()))
+                defaults = remap.default_bindings(state, list(screen._shortcutKeys()))
             except Exception:
                 defaults = {}
             out[state] = (defaults, *reports[state])
